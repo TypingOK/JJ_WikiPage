@@ -4,8 +4,6 @@ import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import ModalWrapper from "../Modal";
-import PostTitleList from "./postTitleList";
 import ContentEditorWrapper from "./mdEditor";
 import { RefMDEditor } from "@uiw/react-md-editor";
 
@@ -28,7 +26,6 @@ const WriteForm = ({ id, title, content, actionFunction }: WriteFormsType) => {
   const router = useRouter();
   const editorRef = useRef<RefMDEditor>(null);
 
-  const [modalOpenState, setModalOpenState] = useState(false);
   const { mutate } = useMutation({
     mutationFn: actionFunction,
     onSuccess: (e) => {
@@ -47,17 +44,8 @@ const WriteForm = ({ id, title, content, actionFunction }: WriteFormsType) => {
     },
   });
 
-  const modalHandler = () => {
-    setModalOpenState((prev) => !prev);
-  };
-
   return (
     <div className="w-full flex flex-col">
-      {modalOpenState && (
-        <ModalWrapper onCloseModal={modalHandler} width="w-4/6">
-          <PostTitleList />
-        </ModalWrapper>
-      )}
       <form
         onSubmit={handleSubmit(async (data) => {
           console.log(editorRef.current?.markdown);
@@ -88,15 +76,6 @@ const WriteForm = ({ id, title, content, actionFunction }: WriteFormsType) => {
         <div className="w-full flex flex-col">
           <div className="flex">
             <label className="w-20">내용</label>
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                modalHandler();
-              }}
-              className="ml-10"
-            >
-              링크 추가
-            </button>
           </div>
           {/* <textarea
             className="w-full h-96 border"

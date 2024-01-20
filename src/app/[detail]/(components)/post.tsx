@@ -3,7 +3,7 @@
 import { useDetailFetch } from "@/hooks/useDetailFetch";
 import { postDetailTypeChecker } from "@/utils/postDetailTypeChecker";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, redirect } from "next/navigation";
 import React, { Fragment } from "react";
 import MDEditor from "@uiw/react-md-editor";
 
@@ -36,27 +36,30 @@ const Detail = () => {
       }
     });
   };
-
-  return (
-    <div className="w-full flex flex-col">
-      <div className="w-full flex">
-        <Link href={`/modify?detail=${data.title}`} className="ml-auto">
-          수정
-        </Link>
+  if (data !== 404) {
+    return (
+      <div className="w-full flex flex-col">
+        <div className="w-full flex">
+          <Link href={`/modify?detail=${data.title}`} className="ml-auto">
+            수정
+          </Link>
+        </div>
+        <div>{data.title}</div>
+        {/* 라이트 테마 */}
+        <div data-color-mode="light">
+          {/* {data.content && transformString(data.content)} */}
+          {data.content && (
+            <MDEditor.Markdown
+              className="w-full p-9 rounded-2xl"
+              source={data.content}
+            />
+          )}
+        </div>
       </div>
-      <div>{data.title}</div>
-      {/* 라이트 테마 */}
-      <div data-color-mode="light">
-        {/* {data.content && transformString(data.content)} */}
-        {data.content && (
-          <MDEditor.Markdown
-            className="w-full p-9 rounded-2xl"
-            source={data.content}
-          />
-        )}
-      </div>
-    </div>
-  );
+    );
+  } else {
+    redirect("/not-exist");
+  }
 };
 
 export default Detail;

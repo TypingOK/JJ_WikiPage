@@ -50,7 +50,7 @@ const dummys = [
   },
 ];
 
-export const dummyPosts = Array.from({ length: 50 }, (_, index) => ({
+export const dummyPosts = Array.from({ length: 62 }, (_, index) => ({
   id: index,
   title: index + 1 + "번째 강의 " + dummys[index % 10].title,
   content: dummys[index % 10].content,

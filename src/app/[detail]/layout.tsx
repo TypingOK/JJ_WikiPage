@@ -3,5 +3,5 @@ export default function detailLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <div>{children}</div>;
+  return <div className="w-full h-full">{children}</div>;
 }

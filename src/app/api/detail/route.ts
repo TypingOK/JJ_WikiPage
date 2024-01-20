@@ -10,9 +10,7 @@ export async function GET(request: Request) {
         return e;
       }
     });
-    console.log("---------------------------------------");
-    console.log("찾은 게시물 결과", findPostResult);
-    console.log(dummyPosts);
+
     if (findPostResult !== undefined) {
       return NextResponse.json(findPostResult);
     } else {

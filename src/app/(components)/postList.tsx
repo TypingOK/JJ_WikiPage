@@ -1,22 +1,25 @@
 "use client";
 
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
-import { useState } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 
 const MainPostList = () => {
-  const [page, setPage] = useState(1);
-  const { data } = useSuspenseQuery({
-    queryKey: ["/api/posts", page],
+  const searchParams = useSearchParams();
+  const page = searchParams.get("page");
+  const router = useRouter();
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["/api/posts", page ? parseInt(page) : 1],
     queryFn: async () => {
       const response = (
-        await fetch(`http://localhost:3000/api/posts?page=${page}`)
+        await fetch(`http://localhost:3000/api/posts?page=${page ? page : 1}`)
       ).json();
       return response;
     },
   });
 
-  if (data && data.posts) {
+  if (data) {
     return (
       <div className="w-full flex flex-col items-center">
         <div className="ml-auto">
@@ -35,16 +38,19 @@ const MainPostList = () => {
           <div className="flex h-full items-center">
             <button
               onClick={() => {
-                setPage(1);
+                router.push(`?page=${1}`);
               }}
               className="mr-2 text-[16px]"
             >{`<<`}</button>
             <button
               onClick={() => {
-                if (page - 1 > 1) {
-                  setPage(page - 1);
-                } else {
-                  setPage(1);
+                if (page) {
+                  const intPage = parseInt(page);
+                  if (intPage - 1 > 1) {
+                    router.push(`?page=${parseInt(page) - 1}`);
+                  } else {
+                    router.push(`?page=${1}`);
+                  }
                 }
               }}
               className="mr-2 text-[16px]"
@@ -53,7 +59,7 @@ const MainPostList = () => {
           {Array.from({ length: data.endPage }, (_, index) => (
             <button
               onClick={() => {
-                setPage((prev) => index + 1);
+                router.push(`?page=${index + 1}`);
               }}
               key={index}
               className={`mr-2 w-11 flex h-11 justify-center items-center text-[16px]font-medium  ${
@@ -66,17 +72,20 @@ const MainPostList = () => {
           <div className="flex h-full items-center">
             <button
               onClick={() => {
-                if (page + 1 >= data.endPage) {
-                  setPage(data.endPage);
-                } else {
-                  setPage(page + 1);
+                if (page) {
+                  const intPage = parseInt(page);
+                  if (intPage + 1 >= data.endPage) {
+                    router.push(`?page=${data.endPage}`);
+                  } else {
+                    router.push(`?page=${intPage + 1}`);
+                  }
                 }
               }}
               className="ml-2 text-[16px]"
             >{`>`}</button>
             <button
               onClick={() => {
-                setPage(data.endPage);
+                router.push(`?page=${data.endPage}`);
               }}
               className="ml-2 text-[16px]"
             >{`>>`}</button>

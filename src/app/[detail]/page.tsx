@@ -3,6 +3,7 @@ import Detail from "./(components)/post";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { getQueryClient } from "@/utils/getQueryClient";
 
+
 const DetailPage = async ({ params }: { params: { detail: string } }) => {
   const queryClient = getQueryClient();
 
@@ -15,7 +16,7 @@ const DetailPage = async ({ params }: { params: { detail: string } }) => {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <Detail />
+        <Detail />
     </HydrationBoundary>
   );
 };
