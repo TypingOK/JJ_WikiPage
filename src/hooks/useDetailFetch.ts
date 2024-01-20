@@ -1,7 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
-const detailFetcher = async (detail: string) => {
-  const response = await fetch(`/api/detail?post=${detail}`);
+export const detailFetcher = async (detail: string) => {
+  const response = await fetch(
+    `http://localhost:3000/api/detail?post=${detail}`
+  );
   if (response.status === 200) {
     return response.json();
   } else {
@@ -10,8 +12,10 @@ const detailFetcher = async (detail: string) => {
 };
 
 export const useDetailFetch = (detail: string) => {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: ["/api/detail", detail],
-    queryFn: () => detailFetcher(detail),
+    queryFn: async () => {
+      return await detailFetcher(detail);
+    },
   });
 };

@@ -1,22 +1,22 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { useState } from "react";
 
 const MainPostList = () => {
   const [page, setPage] = useState(1);
-  const { data, isLoading } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ["/api/posts", page],
     queryFn: async () => {
-      const response = (await fetch(`/api/posts?page=${page}`)).json();
+      const response = (
+        await fetch(`http://localhost:3000/api/posts?page=${page}`)
+      ).json();
       return response;
     },
   });
 
-  if (isLoading) {
-    return <div>불러오는 중...</div>;
-  } else if (data && data.posts) {
+  if (data && data.posts) {
     return (
       <div className="w-full flex flex-col items-center">
         <div className="ml-auto">
