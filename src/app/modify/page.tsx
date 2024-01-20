@@ -1,5 +1,6 @@
 "use client";
 import WriteForm from "@/components/writeForms";
+import { useDetailFetch } from "@/hooks/useDetailFetch";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 
@@ -20,18 +21,7 @@ const ModifyPage = () => {
   const searchParams = useSearchParams();
   const detail = searchParams.get("detail");
 
-  // useQuery 훅스로 분리하기
-  const { data, isLoading } = useQuery({
-    queryKey: ["/api/detail", detail],
-    queryFn: async () => {
-      const response = await fetch(`/api/detail?post=${detail}`);
-      if (response.status === 200) {
-        return response.json();
-      } else {
-        return response.status;
-      }
-    },
-  });
+  const { data, isLoading } = useDetailFetch(detail ? detail : "");
   if (isLoading) {
     return <div>로딩중...</div>;
   } else if (data && data !== 404) {
