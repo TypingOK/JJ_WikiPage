@@ -5,7 +5,8 @@ import { postDetailTypeChecker } from "@/utils/postDetailTypeChecker";
 import Link from "next/link";
 import { useParams, redirect } from "next/navigation";
 import React, { Fragment } from "react";
-import MDEditor from "@uiw/react-md-editor";
+import DetailContent from "./content";
+
 
 const convertToLink = (
   link: string,
@@ -19,11 +20,13 @@ const convertToLink = (
   );
 };
 
-const Detail = () => {
+const DetailWrapper = () => {
   const params = useParams();
   const detail = params.detail;
 
-  const { data } = useDetailFetch(postDetailTypeChecker(detail));
+  const data = useDetailFetch(
+    decodeURIComponent(postDetailTypeChecker(detail))
+  );
 
   const transformString = (inputString: string): React.ReactNode => {
     const parts = inputString.split(/\[\[|\]\]/);
@@ -36,25 +39,11 @@ const Detail = () => {
       }
     });
   };
-  if (data !== 404) {
+  if (typeof data === "object") {
     return (
-      <div className="w-full flex flex-col">
-        <div className="w-full flex">
-          <Link href={`/modify?detail=${data.title}`} className="ml-auto">
-            수정
-          </Link>
-        </div>
-        <div>{data.title}</div>
-        {/* 라이트 테마 */}
-        <div data-color-mode="light">
-          {/* {data.content && transformString(data.content)} */}
-          {data.content && (
-            <MDEditor.Markdown
-              className="w-full p-9 rounded-2xl"
-              source={data.content}
-            />
-          )}
-        </div>
+      <div className="w-full flex flex-col items-center">
+        <div className="w-full flex"></div>
+        <DetailContent post={data} />
       </div>
     );
   } else {
@@ -62,4 +51,4 @@ const Detail = () => {
   }
 };
 
-export default Detail;
+export default DetailWrapper;

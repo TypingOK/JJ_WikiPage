@@ -1,13 +1,6 @@
 "use client";
 
 import {
-  ColumnDef,
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-
-import {
   Table,
   TableBody,
   TableCell,
@@ -17,70 +10,27 @@ import {
 } from "@/components/ui/table";
 import Link from "next/link";
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
-}
-
-const DataTable = <TData, TValue>({
-  columns,
-  data,
-}: DataTableProps<TData, TValue>) => {
-  const table = useReactTable({
-    data,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  });
-
+const DataTable = ({ posts }: { posts: { id: number; title: string }[] }) => {
   return (
-    <div className="rounded-md border">
+    <div className="rounded-md border md:w-2/3 w-full mb-10">
       <Table>
         <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                return (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </TableHead>
-                );
-              })}
-            </TableRow>
-          ))}
+          <TableRow>
+            <TableHead className="w-32">글 번호</TableHead>
+            <TableHead>글 제목</TableHead>
+          </TableRow>
         </TableHeader>
         <TableBody>
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
-              <TableRow key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    <Link
-                      href={`/${row
-                        .getVisibleCells()[1]
-                        .getContext()
-                        .getValue()}`}
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </Link>
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
-                결과 없음.
+          {posts.map((post) => (
+            <TableRow key={post.id}>
+              <TableCell>
+                <Link href={`/${post.title}`}>{post.id}</Link>
+              </TableCell>
+              <TableCell>
+                <Link href={`/${post.title}`}>{post.title}</Link>
               </TableCell>
             </TableRow>
-          )}
+          ))}
         </TableBody>
       </Table>
     </div>

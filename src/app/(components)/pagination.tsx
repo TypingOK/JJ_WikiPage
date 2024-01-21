@@ -19,8 +19,8 @@ const PageListPagination = ({
   const startPage = Math.trunc((page - 1) / 10) * 10 + 1;
   const endPage = startPage + 9 <= lastPage ? startPage + 9 : lastPage;
   return (
-    <Pagination>
-      <PaginationContent>
+    <Pagination className="w-full">
+      <PaginationContent className="w-full flex flex-wrap">
         {startPage > 1 && (
           <PaginationItem>
             <PaginationPrevious

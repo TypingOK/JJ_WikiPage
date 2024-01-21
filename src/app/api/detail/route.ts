@@ -4,9 +4,11 @@ import { dummyPosts } from "../(dummy)/dummyPosts";
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const post = searchParams.get("post");
-  if (post !== undefined) {
+  if (post) {
+    const decodePost = decodeURIComponent(post);
+
     const findPostResult = dummyPosts.find((e) => {
-      if (e.title === post) {
+      if (e.title === decodePost) {
         return e;
       }
     });
@@ -25,6 +27,4 @@ export async function GET(request: Request) {
       statusText: "invalid URL",
     });
   }
-
-  // return NextResponse.json(findPostResult);
 }

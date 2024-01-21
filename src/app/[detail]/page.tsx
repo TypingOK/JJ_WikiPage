@@ -1,14 +1,13 @@
 import { detailFetcher } from "@/hooks/useDetailFetch";
-import Detail from "./(components)/post";
+import Detail from "./(components)/wrapper";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { getQueryClient } from "@/utils/getQueryClient";
-
 
 const DetailPage = async ({ params }: { params: { detail: string } }) => {
   const queryClient = getQueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: [`/api/detail`, params.detail],
+    queryKey: [`/api/detail`, decodeURIComponent(params.detail)],
     queryFn: async () => {
       return await detailFetcher(params.detail);
     },
@@ -16,7 +15,7 @@ const DetailPage = async ({ params }: { params: { detail: string } }) => {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-        <Detail />
+      <Detail />
     </HydrationBoundary>
   );
 };

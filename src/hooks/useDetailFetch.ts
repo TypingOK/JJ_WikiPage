@@ -1,3 +1,4 @@
+import { PostDetail} from "@/types";
 import { useSuspenseQuery } from "@tanstack/react-query";
 
 export const detailFetcher = async (detail: string) => {
@@ -7,15 +8,16 @@ export const detailFetcher = async (detail: string) => {
   if (response.status === 200) {
     return response.json();
   } else {
-    return response.status;
+    return response.status as number;
   }
 };
 
 export const useDetailFetch = (detail: string) => {
-  return useSuspenseQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ["/api/detail", detail],
     queryFn: async () => {
       return await detailFetcher(detail);
     },
   });
+  return data as PostDetail | number;
 };

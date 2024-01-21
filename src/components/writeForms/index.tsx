@@ -1,6 +1,6 @@
 "use client";
 
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -25,11 +25,11 @@ interface WriteFormsType {
 const WriteForm = ({ id, title, content, actionFunction }: WriteFormsType) => {
   const router = useRouter();
   const editorRef = useRef<RefMDEditor>(null);
-
+  const queryClient = useQueryClient();
   const { mutate } = useMutation({
     mutationFn: actionFunction,
     onSuccess: (e) => {
-      router.push(`/${e.title}`);
+      queryClient.invalidateQueries({ queryKey: ["/api/detail", e.title] });
     },
   });
 
@@ -55,9 +55,23 @@ const WriteForm = ({ id, title, content, actionFunction }: WriteFormsType) => {
             editorRef.current.markdown
           ) {
             if (id !== undefined) {
-              mutate({ ...data, id, content: editorRef.current.markdown });
+              mutate(
+                { ...data, id, content: editorRef.current.markdown },
+                {
+                  onSuccess: (e) => {
+                    router.push(`/${e.title}`);
+                  },
+                }
+              );
             } else {
-              mutate({ ...data, content: editorRef.current.markdown });
+              mutate(
+                { ...data, content: editorRef.current.markdown },
+                {
+                  onSuccess: (e) => {
+                    router.push(`/${e.title}`);
+                  },
+                }
+              );
             }
           }
         })}

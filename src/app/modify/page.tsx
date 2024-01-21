@@ -1,8 +1,8 @@
 "use client";
 import WriteForm from "@/components/writeForms";
 import { useDetailFetch } from "@/hooks/useDetailFetch";
-import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
+import { redirect } from "next/navigation";
 
 const modifyPost = async (data: {
   id?: number;
@@ -21,10 +21,9 @@ const ModifyPage = () => {
   const searchParams = useSearchParams();
   const detail = searchParams.get("detail");
 
-  const { data, isLoading } = useDetailFetch(detail ? detail : "");
-  if (isLoading) {
-    return <div>로딩중...</div>;
-  } else if (data && data !== 404) {
+  const data = useDetailFetch(detail ? detail : "");
+  
+  if (typeof data === "object") {
     return (
       <div className="w-full">
         <WriteForm
@@ -36,7 +35,7 @@ const ModifyPage = () => {
       </div>
     );
   } else {
-    return <div>존재하지 않는 데이터입니다.</div>;
+    redirect("/non-exist");
   }
 };
 

@@ -2,10 +2,11 @@
 
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import PageListPagination from "./pagination";
 import DataTable from "./dataTable";
-import { columns } from "./columns";
+import { buttonVariants } from "@/components/ui/button";
+import { PostList } from "@/types";
 
 const MainPostList = () => {
   const searchParams = useSearchParams();
@@ -13,7 +14,7 @@ const MainPostList = () => {
 
   const { data } = useQuery({
     queryKey: ["/api/posts", page ? parseInt(page) : 1],
-    queryFn: async () => {
+    queryFn: async (): Promise<PostList> => {
       const response = (
         await fetch(`http://localhost:3000/api/posts?page=${page ? page : 1}`)
       ).json();
@@ -26,19 +27,15 @@ const MainPostList = () => {
 
     return (
       <div className="w-full flex flex-col items-center">
-        <div className="ml-auto">
-          <Link href={`/write`}>글쓰기</Link>
+        <div className="mb-7 w-full md:w-3/4 flex">
+          <Link
+            href={`/write`}
+            className={`ml-auto ${buttonVariants({ variant: "outline" })}`}
+          >
+            글쓰기
+          </Link>
         </div>
-        <DataTable columns={columns} data={data.posts} />
-        {/* <div>
-          {data.posts.map(
-            (e: { title: string; content: string; id: number }) => (
-              <div key={e.id}>
-                <Link href={`/${e.title}`}>{e.title}</Link>
-              </div>
-            )
-          )}
-        </div> */}
+        <DataTable posts={data.posts} />
         <div className="flex">
           <PageListPagination page={intPage} lastPage={data.endPage} />
         </div>
