@@ -2,10 +2,24 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import ContentEditorWrapper from "./mdEditor";
 import { RefMDEditor } from "@uiw/react-md-editor";
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Button, buttonVariants } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import Link from "next/link";
 
 interface WriteFormsType {
   id?: number;
@@ -33,73 +47,96 @@ const WriteForm = ({ id, title, content, actionFunction }: WriteFormsType) => {
     },
   });
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
+  const formSchema = z.object({
+    title: z.string().refine(
+      (data) => {
+        const trimmedData = data.trim();
+        return trimmedData.length <= 20 && trimmedData !== "";
+      },
+      {
+        message: "빈 문자열은 허용 되지 않으면 20자 이하여야 합니다.",
+      }
+    ),
+  });
+
+  const form = useForm<z.infer<typeof formSchema>>({
     defaultValues: {
       title: title,
-      content: content,
     },
+    resolver: zodResolver(formSchema),
   });
 
   return (
-    <div className="w-full flex flex-col">
-      <form
-        onSubmit={handleSubmit(async (data) => {
-          console.log(editorRef.current?.markdown);
-          if (
-            editorRef !== undefined &&
-            editorRef.current &&
-            editorRef.current.markdown
-          ) {
-            if (id !== undefined) {
-              mutate(
-                { ...data, id, content: editorRef.current.markdown },
-                {
-                  onSuccess: (e) => {
-                    router.push(`/${e.title}`);
-                  },
-                }
-              );
-            } else {
-              mutate(
-                { ...data, content: editorRef.current.markdown },
-                {
-                  onSuccess: (e) => {
-                    router.push(`/${e.title}`);
-                  },
-                }
-              );
+    <div className="w-full flex flex-col items-center p-3">
+      <Form {...form}>
+        <form
+          className="w-full flex flex-col"
+          onSubmit={form.handleSubmit(async (data) => {
+            console.log(editorRef.current?.markdown);
+            if (
+              editorRef !== undefined &&
+              editorRef.current &&
+              editorRef.current.markdown
+            ) {
+              if (id !== undefined) {
+                mutate(
+                  { ...data, id, content: editorRef.current.markdown },
+                  {
+                    onSuccess: (e) => {
+                      router.push(`/${e.title}`);
+                    },
+                  }
+                );
+              } else {
+                mutate(
+                  { ...data, content: editorRef.current.markdown },
+                  {
+                    onSuccess: (e) => {
+                      router.push(`/${e.title}`);
+                    },
+                  }
+                );
+              }
             }
-          }
-        })}
-      >
-        <div className="w-full flex">
-          <label className="w-20">제목</label>
-          <input
-            className="w-2/3 border"
-            {...register("title", {
-              required: "제목을 입력해주세요.",
-            })}
-          />
-          <p>{errors.title?.message}</p>
-        </div>
-
-        <div className="w-full flex flex-col">
-          <div className="flex">
-            <label className="w-20">내용</label>
+          })}
+        >
+          <div className="w-full flex ">
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem className="flex w-full h-16 mb-8 md:mb-2  items-center md:flex-row flex-col">
+                  <FormLabel className="w-full h-full md:mt-3 md:items-center flex md:justify-center ml-4 md:ml-0 md:w-32 text-xl">
+                    제목
+                  </FormLabel>
+                  <FormControl>
+                    <Input {...field} className="md:w-1/2 w-full" />
+                  </FormControl>
+                  <FormMessage className="md:ml-2 ml-0" />
+                </FormItem>
+              )}
+            ></FormField>
           </div>
-          {/* <textarea
-            className="w-full h-96 border"
-            {...register("content", { required: "내용을 입력해주세요." })}
-          /> */}
-          <ContentEditorWrapper editorRef={editorRef} defaultValue={content} />
-          <p>{errors.content?.message}</p>
-        </div>
-        <input className="border ml-auto mt-3 w-40 h-10" type="submit" />
-      </form>
+
+          <div className="mt-2 w-full flex justify-center md:h-[700px] h-[450px]">
+            <ContentEditorWrapper
+              editorRef={editorRef}
+              defaultValue={content}
+            />
+          </div>
+          <div className="flex w-full mt-3">
+            <Link
+              href="/"
+              className={` w-44 ${buttonVariants({ variant: "outline" })}`}
+            >
+              돌아가기
+            </Link>
+            <Button type="submit" className=" w-44 ml-auto">
+              제출
+            </Button>
+          </div>
+        </form>
+      </Form>
     </div>
   );
 };

@@ -17,7 +17,6 @@ export async function PUT(request: Request) {
   dummyPosts[body.id] = {
     ...body,
   };
-  console.log(body);
 
   return NextResponse.json({ title: body.title }, { status: 200 });
 }

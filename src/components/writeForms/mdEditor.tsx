@@ -12,7 +12,15 @@ const ContentEditorWrapper = ({
   defaultValue: string;
 }) => {
   const [value, setValue] = useState<string | undefined>(defaultValue);
-  return <MDEditor value={value} onChange={setValue} ref={editorRef} />;
+  return (
+    <MDEditor
+      value={value}
+      height="100%"
+      onChange={setValue}
+      ref={editorRef}
+      className="w-full"
+    />
+  );
 };
 
 export default ContentEditorWrapper;
