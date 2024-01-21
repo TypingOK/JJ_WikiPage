@@ -22,8 +22,8 @@ export default function RootLayout({
       <body className={inter.className}>
         <Provider>
           <Suspense fallback={<LoadingSpinner />}>
-            <div className="w-full flex justify-center">
-              <div className="max-w-[1200px] w-full">{children}</div>
+            <div className="w-full min-h-screen h-full flex justify-center">
+              <div className="max-w-[1200px] w-full h-full">{children}</div>
             </div>
           </Suspense>
         </Provider>
