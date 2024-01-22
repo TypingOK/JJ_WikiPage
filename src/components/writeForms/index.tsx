@@ -2,7 +2,7 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import ContentEditorWrapper from "./mdEditor";
 import { RefMDEditor } from "@uiw/react-md-editor";
@@ -40,6 +40,7 @@ const WriteForm = ({ id, title, content, actionFunction }: WriteFormsType) => {
   const editorRef = useRef<RefMDEditor>(null);
   const [contentErrorState, setContentErrorState] = useState<boolean>();
   const queryClient = useQueryClient();
+
   const { mutate } = useMutation({
     mutationFn: actionFunction,
     onSuccess: (e) => {
@@ -87,7 +88,7 @@ const WriteForm = ({ id, title, content, actionFunction }: WriteFormsType) => {
                   mutate(
                     { ...data, id, content: editorRef.current.markdown },
                     {
-                      onSuccess: (e) => {
+                      onSuccess: async (e) => {
                         router.push(`/${e.title}`);
                       },
                     }
@@ -96,7 +97,7 @@ const WriteForm = ({ id, title, content, actionFunction }: WriteFormsType) => {
                   mutate(
                     { ...data, content: editorRef.current.markdown },
                     {
-                      onSuccess: (e) => {
+                      onSuccess: async (e) => {
                         router.push(`/${e.title}`);
                       },
                     }

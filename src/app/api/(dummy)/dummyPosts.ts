@@ -302,8 +302,12 @@ JSX를 사용하면 가독성이 높아지고, 컴포넌트의 구조를 직관�
   },
 ];
 
-export const dummyPosts = Array.from({ length: 62 }, (_, index) => ({
+const dummyPosts = Array.from({ length: 62 }, (_, index) => ({
   id: index + 1,
   title: index + 1 + "번째 강의 " + dummys[index % 10].title,
   content: dummys[index % 10].content,
 }));
+
+export const getDummyPost = () => {
+  return dummyPosts;
+};
