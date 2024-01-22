@@ -6,15 +6,14 @@ export async function POST(request: Request) {
 
   dummyPosts.push({
     ...body,
-    id: dummyPosts.length,
+    id: dummyPosts.length + 1,
   });
   return NextResponse.json({ title: body.title }, { status: 200 });
 }
 
 export async function PUT(request: Request) {
   const body = await request.json();
-
-  dummyPosts[body.id] = {
+  dummyPosts[body.id - 1] = {
     ...body,
   };
 

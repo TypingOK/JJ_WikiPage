@@ -51,10 +51,10 @@ const WriteForm = ({ id, title, content, actionFunction }: WriteFormsType) => {
     title: z.string().refine(
       (data) => {
         const trimmedData = data.trim();
-        return trimmedData.length <= 20 && trimmedData !== "";
+        return trimmedData.length <= 50 && trimmedData !== "";
       },
       {
-        message: "빈 문자열은 허용 되지 않으면 20자 이하여야 합니다.",
+        message: "빈 문자열은 허용 되지 않으면 50자 이하여야 합니다.",
       }
     ),
   });
@@ -79,9 +79,10 @@ const WriteForm = ({ id, title, content, actionFunction }: WriteFormsType) => {
             ) {
               const contentZodCheck = z.string().refine((data) => {
                 const trimmedData = data.trim();
-                return trimmedData.length <= 20 && trimmedData !== "";
+                return trimmedData.length > 1 && trimmedData !== "";
               });
               try {
+                console.log(editorRef.current.markdown);
                 contentZodCheck.parse(editorRef.current.markdown);
                 if (id !== undefined) {
                   mutate(
