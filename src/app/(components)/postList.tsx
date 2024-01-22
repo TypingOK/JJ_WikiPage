@@ -34,7 +34,7 @@ const MainPostList = () => {
         <div className="mb-7 w-full md:w-3/4 flex">
           <Link
             href={`/write`}
-            className={`ml-auto ${buttonVariants({ variant: "outline" })}`}
+            className={`ml-auto shadow-md ${buttonVariants({ variant: "outline" })}`}
           >
             글쓰기
           </Link>

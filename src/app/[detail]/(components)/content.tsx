@@ -1,9 +1,8 @@
 "use client;";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -13,29 +12,14 @@ import MDEditor from "@uiw/react-md-editor";
 import Link from "next/link";
 import { useRef, useState } from "react";
 import DetailChapters from "./chapters";
+import extractH1TagsAndHashtags from "@/utils/extractH1TagsAndHashtags";
 
 const DetailContent = ({ post }: { post: PostDetail }) => {
   const parentRef = useRef<HTMLDivElement>(null);
 
-  const extractH1TagsAndHashtags = () => {
-    const combinedMatches = post.content.match(/<h1>.*?<\/h1>|#(?:\s.+)?\n/g);
-    let combinedResult: (string | null)[] = [];
-    if (combinedMatches) {
-      combinedResult = combinedMatches
-        .map((match) => {
-          if (match.startsWith("<h1>")) {
-            return match.replace(/<\/?h1>/g, "");
-          } else if (match.startsWith("#")) {
-            return match.trim().replace(/^#\s+|\n$/, "");
-          }
-          return null;
-        })
-        .filter(Boolean);
-    }
-    return combinedResult;
-  };
-
-  const [hTags] = useState<(string | null)[]>(extractH1TagsAndHashtags());
+  const [hTags] = useState<(string | null)[]>(
+    extractH1TagsAndHashtags(post.content)
+  );
 
   const scrollToH1 = (index: number) => {
     if (parentRef && parentRef.current) {
@@ -49,14 +33,14 @@ const DetailContent = ({ post }: { post: PostDetail }) => {
   };
 
   return (
-    <Card className="md:w-2/3 w-full my-5">
+    <Card className="md:w-2/3 w-full my-5 shadow-xl">
       <CardHeader>
         <CardTitle>{post.title}</CardTitle>
       </CardHeader>
       <CardContent className="w-full flex flex-col">
         <Link
           href={`/modify?detail=${post.title}`}
-          className={`ml-auto ${buttonVariants({ variant: "outline" })}`}
+          className={`ml-auto shadow ${buttonVariants({ variant: "outline" })}`}
         >
           수정
         </Link>
@@ -72,7 +56,10 @@ const DetailContent = ({ post }: { post: PostDetail }) => {
         </div>
       </CardContent>
       <CardFooter>
-        <Link href={`/`} className={buttonVariants({ variant: "outline" })}>
+        <Link
+          href={`/`}
+          className={`shadow ${buttonVariants({ variant: "outline" })}`}
+        >
           목록으로
         </Link>
       </CardFooter>

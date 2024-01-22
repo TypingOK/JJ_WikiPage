@@ -10,7 +10,7 @@ const DetailChapters = ({
   scrollToH1: (index: number) => void;
 }) => {
   return (
-    <Card className="md:w-1/3 w-2/3 my-3 p-3">
+    <Card className="shadow md:w-1/3 w-2/3 my-3 p-3">
       <CardDescription className="ml-2">목차</CardDescription>
       <div className="w-full flex flex-col mr-auto">
         {hTags &&

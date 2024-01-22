@@ -12,7 +12,7 @@ import Link from "next/link";
 
 const DataTable = ({ posts }: { posts: { id: number; title: string }[] }) => {
   return (
-    <div className="rounded-md border md:w-2/3 w-full mb-10">
+    <div className="rounded-md border md:w-2/3 w-full mb-10 shadow-md">
       <Table>
         <TableHeader>
           <TableRow>

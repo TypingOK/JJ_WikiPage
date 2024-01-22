@@ -121,7 +121,7 @@ const WriteForm = ({ id, title, content, actionFunction }: WriteFormsType) => {
                     제목
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} className="md:w-1/2 w-full" />
+                    <Input {...field} className="shadow md:w-1/2 w-full" />
                   </FormControl>
                   <FormMessage className="md:ml-2 ml-0" />
                 </FormItem>
@@ -143,11 +143,11 @@ const WriteForm = ({ id, title, content, actionFunction }: WriteFormsType) => {
           <div className="flex w-full mt-3">
             <Link
               href="/"
-              className={` w-44 ${buttonVariants({ variant: "outline" })}`}
+              className={`shadow w-44 ${buttonVariants({ variant: "outline" })}`}
             >
               돌아가기
             </Link>
-            <Button type="submit" className=" w-44 ml-auto">
+            <Button type="submit" className="shadow w-44 ml-auto">
               제출
             </Button>
           </div>
