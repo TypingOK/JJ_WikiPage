@@ -1,92 +1,16 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# JJ_WikiPage
 
-## Getting Started
+사용자들이 누구나 접근하여 글을 작성하고 열람하고 글을 수정할 수 있는 게시판을 작성하였습니다.
 
-First, run the development server:
+## 메인 페이지
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+메인 페이지에서는 최대 5개의 글을 한번에 확인할 수 있으며 페이지네이션을 통해 최대 10개의 페이지를 한번에 이동할 수 있습니다.
+<br>
+만약 Next를 누른다면 다음 페이지부터 또 다시 10개의 페이지를 가져옵니다.
+<br>
+10개를 넘게 되면 Previous가 나오게 되며 이전 10개 페이지를 가져올 수 있습니다.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-
-<!-- <div className="flex h-full items-center">
-            <button
-              onClick={() => {
-                router.push(`?page=${1}`);
-              }}
-              className="mr-2 text-[16px]"
-            >{`<<`}</button>
-            <button
-              onClick={() => {
-                if (page) {
-                  const intPage = parseInt(page);
-                  if (intPage - 1 > 1) {
-                    router.push(`?page=${parseInt(page) - 1}`);
-                  } else {
-                    router.push(`?page=${1}`);
-                  }
-                }
-              }}
-              className="mr-2 text-[16px]"
-            >{`<`}</button>
-          </div>
-          {Array.from({ length: data.endPage }, (_, index) => (
-            <button
-              onClick={() => {
-                router.push(`?page=${index + 1}`);
-              }}
-              key={index}
-              className={`mr-2 w-11 flex h-11 justify-center items-center text-[16px]font-medium  ${
-                index + 1 === data.page ? `` : ""
-              }`}
-            >
-              {index + 1}
-            </button>
-          ))}
-          <div className="flex h-full items-center">
-            <button
-              onClick={() => {
-                if (page) {
-                  const intPage = parseInt(page);
-                  if (intPage + 1 >= data.endPage) {
-                    router.push(`?page=${data.endPage}`);
-                  } else {
-                    router.push(`?page=${intPage + 1}`);
-                  }
-                }
-              }}
-              className="ml-2 text-[16px]"
-            >{`>`}</button>
-            <button
-              onClick={() => {
-                router.push(`?page=${data.endPage}`);
-              }}
-              className="ml-2 text-[16px]"
-            >{`>>`}</button>
-          </div> -->
+<br>
+게시판의 글 제목 혹은 글 번호를 누르면 해당 페이지로 이동하게 됩니다.
+<br>
+글쓰기를 누르게 되면 글쓰기 페이지로 이동하게 됩니다.

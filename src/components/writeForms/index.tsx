@@ -82,7 +82,6 @@ const WriteForm = ({ id, title, content, actionFunction }: WriteFormsType) => {
                 return trimmedData.length > 1 && trimmedData !== "";
               });
               try {
-                console.log(editorRef.current.markdown);
                 contentZodCheck.parse(editorRef.current.markdown);
                 if (id !== undefined) {
                   mutate(
@@ -143,7 +142,9 @@ const WriteForm = ({ id, title, content, actionFunction }: WriteFormsType) => {
           <div className="flex w-full mt-3">
             <Link
               href="/"
-              className={`shadow w-44 ${buttonVariants({ variant: "outline" })}`}
+              className={`shadow w-44 ${buttonVariants({
+                variant: "outline",
+              })}`}
             >
               돌아가기
             </Link>
