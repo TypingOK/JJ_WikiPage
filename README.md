@@ -4,6 +4,8 @@
 
 배포 주소: [https://jj-wiki-page.vercel.app/](https://jj-wiki-page.vercel.app/)
 
+해당 레포를 실행 할 때 yarn build 후 yarn start 하면 실행 됩니다.
+
 ## 메인 페이지
 
 메인 페이지에서는 최대 5개의 글을 한번에 확인할 수 있으며 페이지네이션을 통해 최대 10개의 페이지를 한번에 이동할 수 있습니다.
