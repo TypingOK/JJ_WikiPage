@@ -17,7 +17,7 @@ const MainPostList = () => {
     queryKey: ["/api/posts", page ? parseInt(page) : 1],
     queryFn: async (): Promise<PostList> => {
       const response = (
-        await fetch(`http://localhost:3000/api/posts?page=${page ? page : 1}`)
+        await fetch(`/api/posts?page=${page ? page : 1}`)
       ).json();
       return response;
     },

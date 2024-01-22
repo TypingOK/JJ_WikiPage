@@ -1,10 +1,8 @@
-import { PostDetail} from "@/types";
+import { PostDetail } from "@/types";
 import { useSuspenseQuery } from "@tanstack/react-query";
 
 export const detailFetcher = async (detail: string) => {
-  const response = await fetch(
-    `http://localhost:3000/api/detail?post=${detail}`
-  );
+  const response = await fetch(`/api/detail?post=${detail}`);
   if (response.status === 200) {
     return response.json();
   } else {
