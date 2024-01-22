@@ -1,6 +1,6 @@
 const LoadingSpinner = () => {
   return (
-    <div className="w-full h-full min-h-screen flex justify-center items-center bg-[rgba(0,0,0,0.3)]">
+    <div className="w-full absolute left-0 top-0 h-full min-h-screen flex justify-center items-center">
       <div
         className="inline-block h-20 w-20 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
         role="status"

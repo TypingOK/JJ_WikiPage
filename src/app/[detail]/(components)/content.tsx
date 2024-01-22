@@ -1,5 +1,5 @@
 "use client;";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -10,10 +10,11 @@ import {
 import { PostDetail } from "@/types";
 import MDEditor from "@uiw/react-md-editor";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 const DetailContent = ({ post }: { post: PostDetail }) => {
-  const router = useRouter();
+  
+  
+
   return (
     <Card className="md:w-2/3 w-full">
       <CardHeader>

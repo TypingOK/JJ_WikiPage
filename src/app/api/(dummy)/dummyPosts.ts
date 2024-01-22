@@ -132,7 +132,7 @@ const dummys = [
 ];
 
 export const dummyPosts = Array.from({ length: 62 }, (_, index) => ({
-  id: index,
+  id: index + 1,
   title: index + 1 + "번째 강의 " + dummys[index % 10].title,
   content: dummys[index % 10].content,
 }));

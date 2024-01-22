@@ -7,12 +7,13 @@ import PageListPagination from "./pagination";
 import DataTable from "./dataTable";
 import { buttonVariants } from "@/components/ui/button";
 import { PostList } from "@/types";
+import LoadingSpinner from "@/components/FallbackUI/loadingSpinner";
 
 const MainPostList = () => {
   const searchParams = useSearchParams();
   const page = searchParams.get("page");
 
-  const { data } = useQuery({
+  const { data,isLoading } = useQuery({
     queryKey: ["/api/posts", page ? parseInt(page) : 1],
     queryFn: async (): Promise<PostList> => {
       const response = (
@@ -21,8 +22,11 @@ const MainPostList = () => {
       return response;
     },
   });
-
-  if (data) {
+  if (isLoading) {
+    return (
+      <LoadingSpinner />
+    ) 
+  }else if (data) {
     const intPage = page ? parseInt(page) : 1;
 
     return (

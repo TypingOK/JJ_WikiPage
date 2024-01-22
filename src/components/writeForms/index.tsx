@@ -2,7 +2,7 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import ContentEditorWrapper from "./mdEditor";
 import { RefMDEditor } from "@uiw/react-md-editor";
@@ -12,7 +12,6 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -39,6 +38,7 @@ interface WriteFormsType {
 const WriteForm = ({ id, title, content, actionFunction }: WriteFormsType) => {
   const router = useRouter();
   const editorRef = useRef<RefMDEditor>(null);
+  const [contentErrorState, setContentErrorState] = useState<boolean>();
   const queryClient = useQueryClient();
   const { mutate } = useMutation({
     mutationFn: actionFunction,
@@ -72,31 +72,41 @@ const WriteForm = ({ id, title, content, actionFunction }: WriteFormsType) => {
         <form
           className="w-full flex flex-col"
           onSubmit={form.handleSubmit(async (data) => {
-            console.log(editorRef.current?.markdown);
             if (
               editorRef !== undefined &&
               editorRef.current &&
               editorRef.current.markdown
             ) {
-              if (id !== undefined) {
-                mutate(
-                  { ...data, id, content: editorRef.current.markdown },
-                  {
-                    onSuccess: (e) => {
-                      router.push(`/${e.title}`);
-                    },
-                  }
-                );
-              } else {
-                mutate(
-                  { ...data, content: editorRef.current.markdown },
-                  {
-                    onSuccess: (e) => {
-                      router.push(`/${e.title}`);
-                    },
-                  }
-                );
+              const contentZodCheck = z.string().refine((data) => {
+                const trimmedData = data.trim();
+                return trimmedData.length <= 20 && trimmedData !== "";
+              });
+              try {
+                contentZodCheck.parse(editorRef.current.markdown);
+                if (id !== undefined) {
+                  mutate(
+                    { ...data, id, content: editorRef.current.markdown },
+                    {
+                      onSuccess: (e) => {
+                        router.push(`/${e.title}`);
+                      },
+                    }
+                  );
+                } else {
+                  mutate(
+                    { ...data, content: editorRef.current.markdown },
+                    {
+                      onSuccess: (e) => {
+                        router.push(`/${e.title}`);
+                      },
+                    }
+                  );
+                }
+              } catch (error) {
+                setContentErrorState(true);
               }
+            } else {
+              setContentErrorState(true);
             }
           })}
         >
@@ -124,6 +134,11 @@ const WriteForm = ({ id, title, content, actionFunction }: WriteFormsType) => {
               defaultValue={content}
             />
           </div>
+          {contentErrorState && (
+            <p className="text-red-600">
+              글 내용에는 공백은 허용되지 않으며 1글자라도 작성되어야 합니다.
+            </p>
+          )}
           <div className="flex w-full mt-3">
             <Link
               href="/"
